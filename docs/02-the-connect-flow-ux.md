@@ -1,10 +1,10 @@
 # Designing a Custom Domain Connection Flow Users Can Finish
 
-The connect flow is the highest-stakes screen in a site builder: the user has finished their site, wants it on their own domain, and is one confusing step away from either upgrading or abandoning. This page describes what a great in-product connect flow looks like, the error states you must design for, and why honesty about propagation beats the traditional "up to 48 hours" shrug. It is part of the [custom domains for website builders](../README.md) guide from [Custom Domain](https://customdomain.ai).
+The connect flow is the highest-stakes screen in a site builder: the user has finished their site, wants it on their own domain, and is one confusing step away from either upgrading or abandoning. This page describes what a great in-product connect flow looks like, the error states you must design for, and why honesty about propagation beats the traditional "up to 48 hours" shrug. It is part of the [custom domains for website builders](../README.md) guide from [CustomDomain](https://customdomain.ai).
 
 ## Why this screen deserves design attention
 
-The Domain Connect Association's knowledge base (CC0) reports that roughly half of users attempting manual DNS setup fail and abandon it, and that help-article-based solutions are structurally brittle: they require users to understand DNS, they fragment across every provider's interface, and they rot whenever a provider redesigns. Your connect flow's job is to remove the user from the loop wherever possible, and to make the remaining manual path feel guided rather than abandoned.
+The Domain Connect project's [knowledge base](https://github.com/Domain-Connect/knowledge-base) (CC0) reports that roughly half of users attempting manual DNS setup fail and abandon it, and that help-article-based solutions are structurally brittle: they require users to understand DNS, they fragment across every provider's interface, and they rot whenever a provider redesigns. Your connect flow's job is to remove the user from the loop wherever possible, and to make the remaining manual path feel guided rather than abandoned.
 
 ## The shape of a great flow
 
@@ -18,7 +18,7 @@ A strong connect flow is a single component in your publish step, not a settings
 
 **4. Authorization or instructions.** For one-click authorization, the user lands on their own provider's consent screen showing exactly which records will be created, approves, and returns. The consent screen belongs to the provider, which is a security feature, not a branding loss: the user is authenticating where their credentials actually live, and nothing is shared with your platform. For the guided manual path, show records generated for their exact provider and domain: real values, copy buttons on every field, and provider-specific navigation hints ("In your provider's dashboard, open DNS settings").
 
-**5. Verifying, visibly and automatically.** The moment records could exist, start polling DNS. Show live status per record: found, not found yet, found but pointing elsewhere. Flip state automatically the second verification passes. A "check again" button that the user must hammer is an admission that your system is not doing its job.
+**5. Verifying, visibly and automatically.** The moment records could exist, start polling DNS. Show live status per record: found, not found yet, found but pointing elsewhere. Flip state automatically the second verification passes. A "check again" button that the user must hammer is an admission that your system is not doing its job. Keep one anyway, wired to a real re-check rather than a page refresh, for the user who fixed something and does not want to wait for the next poll.
 
 **6. Securing.** Certificate issuance begins the instant verification passes. Show it as its own brief state ("Securing your domain with HTTPS") so that the user never sees a browser certificate warning during the gap.
 
@@ -36,7 +36,8 @@ Through provider authorization the whole sequence typically takes about 30 secon
 | CAA record blocks certificate issuance | Plain-language instruction to add or adjust the CAA record, with the exact value shown. |
 | Nameservers changed mid-flow | Re-detect and regenerate instructions rather than letting the user follow stale ones. |
 | Provider not supported for automation | Guided manual flow with generic but exact records and the same automatic verification. Never a bare "contact support." |
-| Domain verified previously but DNS later broke | Proactive notification, not silent downtime. Broken and restored states deserve webhooks and email, not just a dashboard badge. |
+| The records never appear at all | A terminal state, reached after a window long enough to be fair (a day is reasonable when your own system wrote the records, longer when you are waiting on a person), with a clear way to resume rather than start over. |
+| Domain verified previously but DNS later broke | Proactive notification, not silent downtime. Drift deserves an event and an email, not just a dashboard badge. |
 
 The overwrite case deserves special care. Users connecting a domain that carries their email will fear, reasonably, that this will break it. Say explicitly: "This will not affect your email. We only change records for your website." And make it true, by never touching MX or mail-related TXT records. See [DNS records for site builders](03-dns-records-for-site-builders.md) for the scoping details.
 
@@ -50,6 +51,8 @@ The honest pattern is to measure instead of warn. Poll authoritative nameservers
 
 This flow is a conversion funnel and deserves funnel instrumentation: started, method shown, authorized or records displayed, verified, secured, live. The drop-off between "records displayed" and "verified" is your manual-path failure rate, and it is the number that justifies investing in authorization coverage. Track support tickets tagged to domain connection as the companion metric; a working flow should push that number toward zero.
 
-## About Custom Domain
+If you are wiring this against CustomDomain rather than building it, the widget emits a step event on every screen change and a success event at go-live, which is the instrumentation above without extra work. The event names, the callbacks, and the server-side state to mirror are in [integrating the connect flow](05-integrating-the-connect-flow.md).
 
-This guide is maintained by the team behind [Custom Domain](https://customdomain.ai). The [embeddable connect widget](https://customdomain.ai/connect-domain-widget) implements the flow described here as a drop-in component: it renders inside your page, detects the provider as the user types, defaults to the best available connection method for that provider (63 providers supported in total, 25+ of them fully auto-configured), polls verification, handles TLS status, and reports connected, broken, and restored states via page callbacks and server webhooks, with your colors, typography, and copy. See also [one-click DNS setup](https://customdomain.ai/one-click-dns-setup), the [docs](https://app.customdomain.ai/docs), and the [site builders overview](https://customdomain.ai/for/site-builders). Free tier available: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).
+## About CustomDomain
+
+This guide is maintained by the team behind [CustomDomain](https://customdomain.ai). The [embeddable connect widget](https://customdomain.ai/connect-domain-widget) implements the flow described here as a drop-in component: it renders inside your page, detects the provider as the user types, defaults to the best available connection method for that provider (63 providers catalogued in total, 25 of them with an automatic path), polls verification, handles TLS status, and reports progress through page callbacks and signed server webhooks (`connection.live` at go-live, `connection.failed` on a terminal timeout, `domain.record_missing` and `domain.record_restored` on drift afterward), with your colors, typography, and copy. See also [one-click DNS setup](https://customdomain.ai/one-click-dns-setup), the [docs](https://docs.customdomain.ai/docs), and the [site builders overview](https://customdomain.ai/for/site-builders). Free tier available, capped at 10 domain connections a year: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).
