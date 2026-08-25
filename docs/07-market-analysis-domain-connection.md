@@ -17,9 +17,10 @@ This document is the strategic companion to the technical guide in this reposito
 7. [The technical & standards moat](#7-the-moat)
 8. [Demand and the market-education problem](#8-demand)
 9. [Go-to-market and what it takes to launch](#9-gtm)
-10. [Risks and failure modes](#10-risks)
-11. [Verdict and recommendation](#11-verdict)
-12. [Methodology, sources, and caveats](#12-methodology)
+10. [Obstacles to overcome, and the segment-analysis gap](#10-obstacles)
+11. [Risks and failure modes](#11-risks)
+12. [Verdict and recommendation](#12-verdict)
+13. [Methodology, sources, and caveats](#13-methodology)
 
 ---
 
@@ -29,12 +30,12 @@ This document is the strategic companion to the technical guide in this reposito
 The same facts support four different decisions. Here is the shortest path through the document for each, and — most importantly — **what each audience needs before it can act**.
 
 ### Investor / fundraising
-- **Read:** §5 (TAM/SAM/SOM), §6 (competitive structure), §8 (demand nature), §10 (risks), §11 (verdict).
+- **Read:** §5 (TAM/SAM/SOM), §6 (competitive structure), §8 (demand nature), §10 (obstacles + segment-analysis gap), §11 (risks), §12 (verdict).
 - **The thesis to test:** this is a **real but bounded** infrastructure market (base TAM ~$350M/yr), not a mega-market. That is consistent with the incumbent (Entri) being a seed-stage company, not a mega-round company.
-- **Requirements to make this fundable:** a credible path to **$5–11M ARR in 3–5 years** (base-case SOM); a defensible answer to "why doesn't Cloudflare or GoDaddy zero this out" (§10); and evidence you can win a **beachhead vertical** rather than the whole market. Honest framing: this may be an excellent **$5–15M ARR business** and a poor **$100M** one — decide which you are funding.
+- **Requirements to make this fundable:** a credible path to **$5–11M ARR in 3–5 years** (base-case SOM); a defensible answer to "why doesn't Cloudflare or GoDaddy zero this out" (§11); and evidence you can win a **beachhead vertical** rather than the whole market. Honest framing: this may be an excellent **$5–15M ARR business** and a poor **$100M** one — decide which you are funding.
 
 ### Internal go / no-go
-- **Read:** all of it, but especially §8 (is demand real?), §7 (can we actually build it?), §9 (what will it cost us?), §10 (what kills us?).
+- **Read:** all of it, but especially §8 (is demand real?), §10 (obstacles + how thin is our market read?), §7 (can we actually build it?), §9 (what will it cost us?), §11 (what kills us?).
 - **The decision:** demand for the *outcome* is active and quantifiable; demand for the *category* is latent (§8). You are not inventing a problem — you are convincing buyers it is worth paying to fix and that a vendor category exists.
 - **Requirements to say "go":** conviction on a single wedge vertical; ~$250–750k of runway and a 3–4 person team (§9); a founder who can do developer-led BD; and acceptance that the TLS layer is a commodity you resell, not a moat you build.
 
@@ -44,7 +45,7 @@ The same facts support four different decisions. Here is the shortest path throu
 - **Requirements to launch:** a "wow" MVP (widget + API + Domain Connect + ~3 marquee integrations + resold TLS) in **4–6 weeks**; a credible product (~12–15 integrations + fallback) in **10–14 weeks**; a real free tier; and cornerstone developer-marketing content targeting *branded* and *platform-specific* search, not the dead category keywords.
 
 ### Full landscape reference
-- **Read:** everything; §6, §7, and §12 are the densest reference material, with a full player/pricing matrix and every source URL.
+- **Read:** everything; §6, §7, and §13 are the densest reference material, with a full player/pricing matrix and every source URL.
 
 ---
 
@@ -61,7 +62,7 @@ The same facts support four different decisions. Here is the shortest path throu
 
 5. **The moat is breadth-of-integrations + TLS-ops correctness + security, kept alive over time.** Domain Connect (the open standard) covers only ~20 DNS providers / ~35% of `.com`; the other ~65% needs perpetually-maintained bespoke integrations. That treadmill is both the barrier to entry and the reason the incumbent compounds (§7).
 
-6. **A fast-follower has room, but the window is narrowing and the honest risk is category commoditization.** There is a real price-cliff opening below Entri's $249/mo floor, and an AI-builder tailwind that manufactures new addressable customers in bulk. But you would be the *third or fourth* fast-follower (Domainee, subdomain.to, SaaSKevin already exist), and a bundler (Cloudflare/GoDaddy) making the widget free is the most likely thing that kills the category (§10).
+6. **A fast-follower has room, but the window is narrowing and the honest risk is category commoditization.** There is a real price-cliff opening below Entri's $249/mo floor, and an AI-builder tailwind that manufactures new addressable customers in bulk. But you would be the *third or fourth* fast-follower (Domainee, subdomain.to, SaaSKevin already exist), and a bundler (Cloudflare/GoDaddy) making the widget free is the most likely thing that kills the category (§11).
 
 **One-line verdict:** *A viable, capital-efficient niche business with a genuine tailwind — winnable only if you go narrow and fast (AI-builder vertical, agent-native, real free tier, TLS resold), and go in clear-eyed that it may be a strong small business rather than a venture-scale one, and that a bundler could compress the category at any time.*
 
@@ -84,7 +85,7 @@ This is the structural root cause, and it is why the failure is not fixable with
 - **Leftover conflicting records** and **www vs non-www asymmetry** produce intermittent, hard-to-diagnose failures.
 - **The SSL race:** certificates can't issue until DNS resolves, so users hit cert warnings even after the DNS is right.
 
-Voice of customer, verbatim, from public forums (URLs in §12):
+Voice of customer, verbatim, from public forums (URLs in §13):
 - *"I just CANNOT connect the domain, which our store kind of hinges on… I am at my wit's end."* — Shopify merchant
 - *"I recently moved site from WordPress to Shopify and changed the DNS records… my email which is also hosted by GoDaddy stopped working."* — Shopify community
 - *"CNAME is like mayonnaise in the world of DNS records… A CNAME DNS record forces out all others including MX. That means users will not be able to use a custom domain email!"* — DEV.to, *"Remember this when you start building a website builder"*
@@ -255,6 +256,9 @@ Registrars and third parties are shipping **MCP servers** (GoDaddy, Hostinger, N
 <a name="8-demand"></a>
 ## 8. Demand and the market-education problem
 
+> ### Is the market demanding it? — the direct answer
+> **Not on its own, not yet — and that is the central strategic fact of this whole brief.** The market is *not* pulling this product off the shelf the way it pulls payments (Stripe) or auth (Auth0), where the buyer already knows the category name and has a budget line. Here, **the pain is demanded but the product is not**: end users are actively, loudly frustrated by manual DNS (the forum record and platform-specific search volume prove it), yet the *platforms* who would buy the fix mostly don't know this category exists, don't have a line item for it, and won't search for it. So demand has to be **converted, not merely captured** — you sell into pain that is already felt but not yet named, and you accept that a meaningful share of your effort is market-making, not order-taking. The one exception where demand *is* actively pulling: the self-aware "built-it, hate-it" cohort and the exploding AI-builder segment (see §8 timing). Treat those as the beachhead precisely because they are the only places demand is already active.
+
 **Verdict: MIXED, tilting LATENT — with a real active-demand beachhead and a strong timing tailwind.** The distinction that matters: **demand for the *outcome* (users connecting domains painlessly) is active and measurable; demand for the *solution category* is largely latent.** You are not educating a market about a non-existent problem — the problem is real and felt — but you must convince buyers that (a) it's worth paying to fix, and (b) a vendor category exists.
 
 ### The search data is the smoking gun (real Semrush US monthly volumes)
@@ -340,8 +344,41 @@ There is **no budget line called "domain connection."** Spend comes from enginee
 
 ---
 
-<a name="10-risks"></a>
-## 10. Risks and failure modes (candid)
+<a name="10-obstacles"></a>
+## 10. Obstacles to overcome, and the segment-analysis gap
+
+Everything above says the opportunity is real. This section is the honest counterweight: the specific obstacles a new entrant must clear *before* the TAM/SAM/SOM in §5 means anything — and a candid admission of where this analysis itself is still too thin to bet the company on.
+
+### 10.1 The obstacles, in the order they will actually bite
+
+1. **Educating a market that doesn't know the category exists.** This is the first and biggest wall, and it is the direct consequence of the demand finding in §8: category search is ~0, there is no budget line, and the pain is felt by end users but not consciously owned by the platform that would buy. You therefore have to *manufacture awareness* — teach a platform that (a) domain connection is quietly costing it churn and support, and (b) an outside vendor category exists to fix it. That is a slow, expensive, low-yield motion if run top-down, and **competitors free-ride on the content you pay to produce.** How to clear it: don't educate the whole market — ride the two pockets where awareness already exists (the "built-it, hate-it" cohort and AI builders), sell the *outcome* not the category, and let bottom-up PLG carry the teaching so the buyer educates themselves at the moment of pain.
+
+2. **Creating a budget line where none exists.** Spend today comes out of engineering time or is buried in "hosting/infra." You are asking a platform to move money into a category it has never budgeted for. Clear it by pricing *below the cost of the eng-time it replaces* (build-vs-buy math) and by attaching to a moment when the platform is already spending — a launch, a migration, a support-cost review.
+
+3. **Proving a cost that is invisible.** "This is costing you churn and support" is diffuse, spread across tickets, with no dashboard screaming it. Until you can show a platform *its own* number, the ROI case is abstract. Clear it by instrumenting the pain: a free audit/diagnostic that surfaces a platform's real domain-step abandonment and DNS-ticket volume turns an invisible leak into a quantified one — and doubles as a lead magnet.
+
+4. **Out-differentiating an already-crowded fast-follower field.** "Cheaper + good docs + an MCP server" is taken (Domainee, subdomain.to, SaaSKevin). Clear it by winning a *vertical* deeply (AI builders, agent-native) rather than competing horizontally on price.
+
+5. **Surviving the bundler overhang while you do all of the above.** The whole education effort is undercut if a buyer suspects Cloudflare or GoDaddy will make this free. Clear it by owning the cross-registrar breadth and publish-flow embedding that a single-registrar bundle structurally cannot match — and by never resting the moat on the commoditized TLS half.
+
+6. **The trust gate.** DNS is unforgiving; one botched MX write kills a reference customer. Reliability is itself an obstacle to adoption because buyers know the downside. Clear it by making the verification/propagation engine visibly excellent and scoping writes to web records only.
+
+### 10.2 The segment-analysis gap — the risk of acting on a market picture that is still too thin
+
+The sizing in §5 is defensible at the order-of-magnitude level, but a go/no-go or a fundraise should not lean on it as if it were finished. **The single largest risk in this document is not competition — it is deciding on a market and segmentation that have not been analyzed deeply enough.** Where it is currently too thin, and what that risks:
+
+- **The two top-down fractions are estimates, not measurements.** "Active-use %" and "platform-connected %" of the 386.9M domain base are the load-bearing inputs to TAM, and neither is sourced — a reasonable skeptic can move TAM by 3–5× just by flexing them. *Risk:* a TAM that looks like $350M or $1B depending on assumptions nobody has validated.
+- **The serviceable segment is asserted, not sized bottom-up.** "~30% outsources rather than builds" is a judgment call. We have *not* enumerated the actual serviceable platforms — how many mid-market SaaS, AI builders, e-commerce, email, link-in-bio, help-desk, and white-label agencies there really are, how many custom-domain users each has, and which are past the "you must be this tall" line. *Risk:* the winnable SAM could be materially smaller than $105M if the giants' in-house share is larger than assumed, or if most long-tail platforms never cross the pain threshold.
+- **No segment has been proven to have enough depth on its own.** The wedge (AI builders) is chosen on *trajectory and fit*, not on a counted, reachable population with measured willingness-to-pay. *Risk:* the beachhead is real but shallow — a few flagship logos and then a fast-thinning tail — which is exactly how an infra company stalls at $2–5M ARR.
+- **Willingness-to-pay is inferred from competitor pricing, not tested.** We anchor on Entri/Cloudflare/Domainee prices; we have not confirmed what a platform will actually pay per connection, or whether the free-tier→paid conversion holds. *Risk:* the per-connection blended price (the other big TAM lever) is a guess.
+- **Demand depth rests on one interested-party stat and directional search data.** The "~50% fail" figure is advocacy (§4), and the AI-builder user/ARR numbers are secondary blogs. *Risk:* the pain is real but its *magnitude* — the thing that sizes the savings and the ROI pitch — is not independently established.
+
+**What this means practically:** the sensible sequence is to spend the *first* tranche of effort/capital buying down this analysis risk before committing to scale — a proper bottom-up count of serviceable platforms per segment, 15–25 buyer interviews to test willingness-to-pay and the build-vs-buy trigger, and first-party data (your own or a design partner's) on real abandonment and DNS-ticket share. Until those exist, treat §5 as a hypothesis to validate, not a plan to execute. The highest-value near-term deliverable is not more product — it is a segmentation deep-dive that turns the four load-bearing estimates into measured numbers.
+
+---
+
+<a name="11-risks"></a>
+## 11. Risks and failure modes (candid)
 
 1. **Bundling / platform-dependency — the big one.** Cloudflare for SaaS already commoditized the TLS half to $0.10. If **Cloudflare, GoDaddy, Vercel, or Netlify bundles the DNS-config *widget* for free**, standalone value collapses. **Most likely killer.** Mitigation: don't moat on TLS; get embedded deep in the publish flow before a bundler moves; stay cross-registrar-neutral (breadth no single registrar-bundle matches).
 2. **Entri's head start + GoDaddy partnership** locks up the #1 registrar and the "safe incumbent" position; you lose head-to-head enterprise bake-offs on breadth. Mitigation: don't fight there.
@@ -356,8 +393,8 @@ There is **no budget line called "domain connection."** Spend comes from enginee
 
 ---
 
-<a name="11-verdict"></a>
-## 11. Verdict and recommendation
+<a name="12-verdict"></a>
+## 12. Verdict and recommendation
 
 **There is room for a fast-follower, but the honest picture is harder than "beat Entri's $249 floor."** The TLS half is already commoditized by Cloudflare; the widget half already has several cheap, developer-friendly fast-followers. The only version that works with limited runway is **narrow and fast**:
 
@@ -370,8 +407,8 @@ There is **no budget line called "domain connection."** Spend comes from enginee
 
 ---
 
-<a name="12-methodology"></a>
-## 12. Methodology, sources, and caveats
+<a name="13-methodology"></a>
+## 13. Methodology, sources, and caveats
 
 **Method.** Six parallel research streams (competitive landscape, market sizing, manual-config pain/cost, technical/standards, demand/education, GTM/resourcing), each source-cited, synthesized here. The Domain Connect template counts were verified by directly cloning `github.com/Domain-Connect/Templates`. Search volumes are real Semrush US monthly figures. Figures are labeled `[SOURCED]` vs `[ESTIMATE]`; strategic calls are `[OPINION]`.
 
