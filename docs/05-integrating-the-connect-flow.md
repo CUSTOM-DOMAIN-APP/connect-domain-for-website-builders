@@ -1,8 +1,8 @@
 # Integrating the Connect Flow: Widget, Webhooks, and State
 
-The first four pages of this guide describe the machinery. This one is the integration itself: minting a token, mounting the widget in a publish flow, the connection state machine your database has to mirror, and the webhook contract that drives it. It is part of the [custom domains for website builders](../README.md) guide from [CustomDomain](https://customdomain.ai).
+The first four pages of this guide describe the machinery. This one is the integration itself: minting a token, mounting the widget in a publish flow, the connection state machine your database has to mirror, and the webhook contract that drives it. It is part of the [custom domains for website builders](../README.md) guide from [CustomDomain™](https://customdomain.ai).
 
-Everything below is the CustomDomain contract specifically. If you are building your own system, the shapes are still worth reading as a checklist of what a connect integration has to expose: a short-lived browser credential, a state machine with a terminal failure, signed server-side events, and a way to re-check on demand.
+Everything below is the CustomDomain™ contract specifically. If you are building your own system, the shapes are still worth reading as a checklist of what a connect integration has to expose: a short-lived browser credential, a state machine with a terminal failure, signed server-side events, and a way to re-check on demand.
 
 ## The credential split
 
@@ -92,11 +92,11 @@ propagating  --[ window expires, records unseen ]->  failed
 | `pending` | Created; records not written or not yet observed | The connect flow, resumable |
 | `propagating` | Records written by a rail, being checked against public DNS | "Setting up," with real per-record status |
 | `live` | Every desired record resolves to its intended value; the edge serves TLS | The domain as a clickable HTTPS link |
-| `failed` | The records never appeared inside the window | The reason plus a way to retry |
+| `failed` | Records a rail wrote never resolved within 24 hours, or the rail rejected the write | The reason plus a way to retry |
 
 There is no separate ownership challenge in this machine, and no TXT challenge record. Control of the zone is proven by the rail: an OAuth authorization, a one-click setup apply, or a scoped API token each require the customer to authenticate where the zone actually lives. On the manual rail the poller waits for the pointing records to show up with the expected values.
 
-The two windows differ on purpose. An automatic rail wrote the records itself, so if they have not resolved in 24 hours something is wrong and the connection goes `failed` with `error_code: propagation_timeout`. A manual connection is waiting on a human, so it gets 72 hours before `setup_incomplete`. Both clear automatically if the records later appear.
+The two cases differ on purpose. An automatic rail wrote the records itself, so if they have not resolved in 24 hours something is wrong and the connection goes `failed` with `error_code: propagation_timeout`. A manual connection is waiting on a human, so it never fails on its own: after 72 hours in `pending` it gains `error_code: setup_incomplete` as a diagnosis and is re-checked every six hours until the records appear. A `failed` connection clears automatically if the records later appear.
 
 `POST /v1/connections/{id}:recheck` resolves the record set in-request and returns a per-record verdict rather than whatever the background poller last saw. It promotes a resolvable connection straight to `live`, and re-enters a `failed` one into verification with its clock re-based. This is the call behind a "check again" button, and it is also the right call to make when a user tells support their domain is working but your dashboard disagrees.
 
@@ -189,8 +189,8 @@ So your handler must be idempotent. The same event can arrive more than once; de
 - [Create a connection](https://docs.customdomain.ai/docs/connect-flow/create-a-connection)
 - [Connections: lifecycle, records, drift](https://docs.customdomain.ai/docs/concepts/connections)
 - [Webhooks overview](https://docs.customdomain.ai/docs/webhooks/overview) and [verifying signatures](https://docs.customdomain.ai/docs/webhooks/verifying-signatures)
-- The served spec: [api.customdomain.ai/v1/openapi.json](https://api.customdomain.ai/v1/openapi.json), OpenAPI 3.1, 67 paths at the time of writing
+- The served spec: [api.customdomain.ai/v1/openapi.json](https://api.customdomain.ai/v1/openapi.json), OpenAPI 3.1, 68 paths on 2026-09-26
 
-## About CustomDomain
+## About CustomDomain™
 
-This guide is maintained by the team behind [CustomDomain](https://customdomain.ai), which catalogs 63 DNS and registrar providers, 25 of them with an automatic path and 38 on a guided flow with automatic verification. Integrate through the [connect widget](https://customdomain.ai/connect-domain-widget) or the [REST API](https://customdomain.ai/custom-domain-api). Docs: [docs.customdomain.ai](https://docs.customdomain.ai/docs). Pricing starts at $0, with the free tier capped at 10 domain connections a year: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).
+This guide is maintained by the team behind [CustomDomain™](https://customdomain.ai), which catalogs 63 DNS and registrar providers, 25 of them with an automatic path and 38 on a guided flow with automatic verification. Integrate through the [connect widget](https://customdomain.ai/connect-domain-widget) or the [REST API](https://customdomain.ai/custom-domain-api). Docs: [docs.customdomain.ai](https://docs.customdomain.ai/docs). Pricing starts at $0, with the free tier capped at 10 domain connections a year: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).

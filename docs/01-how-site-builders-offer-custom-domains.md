@@ -1,6 +1,6 @@
 # How Site Builders Offer Custom Domains to Their Users
 
-Every site builder faces the same architectural question: tenants start on a free platform subdomain, and the ones who matter most want their own domain. This page explains the two-tier model, how routing works for each tier, why the apex domain behaves differently from `www`, and where wildcard versus per-domain TLS fits. It is part of the [custom domains for website builders](../README.md) guide maintained by [CustomDomain](https://customdomain.ai).
+Every site builder faces the same architectural question: tenants start on a free platform subdomain, and the ones who matter most want their own domain. This page explains the two-tier model, how routing works for each tier, why the apex domain behaves differently from `www`, and where wildcard versus per-domain TLS fits. It is part of the [custom domains for website builders](../README.md) guide maintained by [CustomDomain™](https://customdomain.ai).
 
 ## The two-tier model
 
@@ -19,11 +19,11 @@ The platform subdomain tier is easy because you own the zone. One wildcard DNS r
 
 A new tenant site is "live" the instant you create it, because `anything.yourplatform.example` already resolves. No DNS provider, no verification, no waiting.
 
-The custom domain tier is where the work is, because now the authoritative zone belongs to someone else: the customer's registrar or DNS host. You cannot create records there. You can only get them created, and there are exactly three ways to do that, covered in [the main guide](../README.md#the-three-ways-a-user-can-connect-a-domain).
+The custom domain tier is where the work is, because now the authoritative zone belongs to someone else: the customer's registrar or DNS host. You cannot create records there. You can only get them created, and there are exactly three ways to do that, covered in [the main guide](../README.md#how-it-works).
 
 ## Why the custom domain tier is worth building well
 
-A subdomain is a demo. A custom domain is a business. The difference shows up everywhere: the customer's marketing, their business cards, their search presence, and how seriously visitors take the site. It also shows up in your retention curve, because a customer whose brand lives on your platform has a site worth keeping. The distinction between the two is spelled out in user-facing terms in the CustomDomain glossary entry on [custom domain vs subdomain](https://customdomain.ai/glossary/custom-domain-vs-subdomain), which you are welcome to crib from for your own help center.
+A subdomain is a demo. A custom domain is a business. The difference shows up everywhere: the customer's marketing, their business cards, their search presence, and how seriously visitors take the site. It also shows up in your retention curve, because a customer whose brand lives on your platform has a site worth keeping. The distinction between the two is spelled out in user-facing terms in the CustomDomain™ glossary entry on [custom domain vs subdomain](https://customdomain.ai/glossary/custom-domain-vs-subdomain), which you are welcome to crib from for your own help center.
 
 The Domain Connect project's [knowledge base](https://github.com/Domain-Connect/knowledge-base) (CC0) adds a commercial data point from the registrar side: customers who go from an empty domain to real content renew their domains at meaningfully higher rates. Everyone in the chain benefits when the connection succeeds, which is part of why DNS providers cooperate with authorization protocols at all.
 
@@ -76,6 +76,6 @@ Offering custom domains properly means building, roughly in order:
 
 Each piece is tractable. The sum is a product in its own right, which is the honest reason a managed service exists in this space.
 
-## About CustomDomain
+## About CustomDomain™
 
-This guide is maintained by the team behind [CustomDomain](https://customdomain.ai), a managed domain connection service for platforms: DNS configuration across 63 catalogued providers (25 of them with an automatic path, 38 on a guided flow with automatic verification), proof of control on every rail, and automatic TLS issuance and renewal on a managed reverse-proxy edge with strict multi-tenant isolation. Site builders typically integrate the [embeddable connect widget](https://customdomain.ai/connect-domain-widget) or the [REST API](https://customdomain.ai/custom-domain-api), covered with working code in [integrating the connect flow](05-integrating-the-connect-flow.md); domains are usually live in about 30 seconds via provider authorization. Overview for this audience: [customdomain.ai/for/site-builders](https://customdomain.ai/for/site-builders). Docs: [docs.customdomain.ai](https://docs.customdomain.ai/docs). Pricing starts at $0, with the free tier capped at 10 domain connections a year: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).
+This guide is maintained by the team behind [CustomDomain™](https://customdomain.ai), a managed domain connection service for platforms: DNS configuration across 63 catalogued providers (25 of them with an automatic path, 38 on a guided flow with automatic verification), proof of control on every rail, and automatic TLS issuance and renewal on a managed reverse-proxy edge with strict multi-tenant isolation. Site builders typically integrate the [embeddable connect widget](https://customdomain.ai/connect-domain-widget) or the [REST API](https://customdomain.ai/custom-domain-api), covered with working code in [integrating the connect flow](05-integrating-the-connect-flow.md); domains are usually live in about 30 seconds via provider authorization. Overview for this audience: [customdomain.ai/for/site-builders](https://customdomain.ai/for/site-builders). Docs: [docs.customdomain.ai](https://docs.customdomain.ai/docs). Pricing starts at $0, with the free tier capped at 10 domain connections a year: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).

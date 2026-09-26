@@ -1,6 +1,6 @@
 # DNS Records for Site Builder Custom Domains
 
-This page lists the exact DNS records a site builder platform needs on a customer's domain, explains the apex problem and CNAME flattening, and covers the records your flow must never touch. It is the technical companion to [the connect flow UX](02-the-connect-flow-ux.md) in the [custom domains for website builders](../README.md) guide from [CustomDomain](https://customdomain.ai).
+This page lists the exact DNS records a site builder platform needs on a customer's domain, explains the apex problem and CNAME flattening, and covers the records your flow must never touch. It is the technical companion to [the connect flow UX](02-the-connect-flow-ux.md) in the [custom domains for website builders](../README.md) guide from [CustomDomain™](https://customdomain.ai).
 
 ## The records at a glance
 
@@ -47,7 +47,7 @@ The cost is that the customer's zone now pins your IP addresses. If your infrast
 
 **Option 3: Redirect the apex to `www`.** Some registrars offer HTTP-level apex forwarding to `www`, which then carries a normal CNAME. This works but adds a redirect hop and an extra provider feature dependency, so treat it as a fallback, not a default.
 
-A good connect flow chooses among these per provider without asking the user anything. This is precisely the kind of provider-by-provider knowledge that is tedious to build and maintain in-house, and it is a core part of what [CustomDomain](https://customdomain.ai/one-click-dns-setup) handles across its 63 catalogued providers, 25 of them with an automatic path. Whether a given provider supports flattening is exposed per domain by the pre-flight check (`cnameFlattening` on `POST /v1/domains:check`), so your UI can branch on it rather than guessing.
+A good connect flow chooses among these per provider without asking the user anything. This is precisely the kind of provider-by-provider knowledge that is tedious to build and maintain in-house, and it is a core part of what [CustomDomain™](https://customdomain.ai/one-click-dns-setup) handles across its 63 catalogued providers, 25 of them with an automatic path. Whether a given provider supports flattening is exposed per domain by the pre-flight check (`cname_flattening` on `POST /v1/domains:check`, `cnameFlattening` in the SDK's `checkDomain` result), so your UI can branch on it rather than guessing.
 
 ## The verification record: TXT, and when you do not need one
 
@@ -59,7 +59,7 @@ _verify.mybakery.example.   300  IN  TXT  "yourplatform-verification=7f3a9c1b24d
 
 Keep the TTL short (300 seconds is typical) so verification polls see the record quickly, and keep the hostname namespaced (an underscore prefix by convention) so it never collides with real service records.
 
-A challenge record is one way to prove control, not the only way, and it costs the user an extra record to copy. If the pointing records were written through a channel that already required the zone owner to authenticate, the write itself is the proof. CustomDomain works this way and issues no TXT challenge at all: an OAuth authorization, a one-click setup apply, or a scoped API token each demonstrate control directly, and on the guided manual rail the poller waits for the pointing records to resolve to their expected values, which is the same evidence a challenge would have produced.
+A challenge record is one way to prove control, not the only way, and it costs the user an extra record to copy. If the pointing records were written through a channel that already required the zone owner to authenticate, the write itself is the proof. CustomDomain™ works this way and issues no TXT challenge at all: an OAuth authorization, a one-click setup apply, or a scoped API token each demonstrate control directly, and on the guided manual rail the poller waits for the pointing records to resolve to their expected values, which is the same evidence a challenge would have produced.
 
 Whichever mechanism you choose, the ordering is not negotiable: control must be proven before certificates are issued and before traffic is routed. The reasons are covered in [how site builders offer custom domains](01-how-site-builders-offer-custom-domains.md), and the consequence of getting it wrong is in [when a customer leaves](06-when-a-customer-leaves.md).
 
@@ -89,6 +89,6 @@ CAA records declare which certificate authorities may issue for a domain. Most d
 
 Remember that TTLs govern the transition away from a record, not toward it: replacing a record with an 86400-second TTL means stale answers can persist for up to a day. This is the honest explanation behind most "slow propagation," and your flow should read the old record's TTL and tell the user the real number, as described in [the connect flow UX](02-the-connect-flow-ux.md).
 
-## About CustomDomain
+## About CustomDomain™
 
-This guide is maintained by the team behind [CustomDomain](https://customdomain.ai), which catalogs 63 DNS and registrar providers. On the 25 with an automatic path (17 by scoped API token, 6 by one-click OAuth, 2 by Domain Connect) it writes and verifies the pointing records for you; on the other 38 it generates exact guided instructions and verifies them automatically as they appear. It chooses the right apex strategy per provider, and issues and renews TLS certificates the moment a connection verifies, typically taking a domain live in about 30 seconds via provider authorization. Integrate through the [connect widget](https://customdomain.ai/connect-domain-widget) or the [REST API](https://customdomain.ai/custom-domain-api), with working code in [integrating the connect flow](05-integrating-the-connect-flow.md) and full details in the [docs](https://docs.customdomain.ai/docs). Pricing starts at $0, with the free tier capped at 10 domain connections a year: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).
+This guide is maintained by the team behind [CustomDomain™](https://customdomain.ai), which catalogs 63 DNS and registrar providers. On the 25 with an automatic path (17 by scoped API token, 6 by one-click OAuth, 2 by Domain Connect) it writes and verifies the pointing records for you; on the other 38 it generates exact guided instructions and verifies them automatically as they appear. It chooses the right apex strategy per provider, and issues and renews TLS certificates the moment a connection verifies, typically taking a domain live in about 30 seconds via provider authorization. Integrate through the [connect widget](https://customdomain.ai/connect-domain-widget) or the [REST API](https://customdomain.ai/custom-domain-api), with working code in [integrating the connect flow](05-integrating-the-connect-flow.md) and full details in the [docs](https://docs.customdomain.ai/docs). Pricing starts at $0, with the free tier capped at 10 domain connections a year: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).

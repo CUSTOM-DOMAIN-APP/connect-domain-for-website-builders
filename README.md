@@ -1,10 +1,13 @@
-# Custom Domains for Website Builders
+# CustomDomain™ for Website Builders
 
 Connect custom domains to your website builder: a field guide to one-click domain connection.
 
-**Status:** Published · 6 guides · public
+**Status:** Published · 6 guides · live API numbers re-verified on 2026-09-26 · public
 
-[![License](https://img.shields.io/badge/license-MIT-1c1917?style=flat)](LICENSE)
+[![docs](https://img.shields.io/badge/docs-docs.customdomain.ai-1c1917?style=flat)](https://docs.customdomain.ai/docs)
+[![license](https://img.shields.io/badge/license-MIT-1c1917?style=flat)](./LICENSE)
+
+[Website](https://customdomain.ai) · [Docs](https://docs.customdomain.ai/docs) · [Console](https://app.customdomain.ai) · [For site builders](https://customdomain.ai/for/site-builders) · [Connect widget](https://customdomain.ai/connect-domain-widget)
 
 |  |  |
 |---|---|
@@ -12,12 +15,12 @@ Connect custom domains to your website builder: a field guide to one-click domai
 | **Who it's for** | Engineers and product teams behind site builders and no-code platforms |
 | **Live at** | [customdomain.ai/for/site-builders](https://customdomain.ai/for/site-builders) · [docs.customdomain.ai](https://docs.customdomain.ai/docs) |
 | **Stack** | Markdown only · 6 guides · no build step · MIT |
-| **Status** | Published · every number re-verified against the live provider census on 2026-09-04 |
+| **Status** | Published · provider census and API path count re-verified 2026-09-26 |
 
 This repository explains how website builder platforms let their users publish on a domain
 they own: the DNS records involved, how ownership verification and TLS issuance actually
 work, and how to build a connect flow a non-technical user can finish without a support
-ticket. It is maintained by the team behind [Custom Domain](https://customdomain.ai).
+ticket. It is maintained by the team behind [CustomDomain™](https://customdomain.ai).
 
 ## The problem
 
@@ -132,19 +135,34 @@ LICENSE                                          MIT
   illustrative extracts of the real SDK surface documented at [docs.customdomain.ai](https://docs.customdomain.ai/docs).
 - Numbers age. Provider counts and API shapes are re-verified against the
   [census endpoint](https://api.customdomain.ai/v1/providers/census) and the served
-  [OpenAPI 3.1 spec](https://api.customdomain.ai/v1/openapi.json), which currently describes
-  67 paths. Check them before quoting them.
-- Domain Connect is an open protocol maintained by its own association, not a Custom Domain
+  [OpenAPI 3.1 spec](https://api.customdomain.ai/v1/openapi.json), which described 68 paths
+  on 2026-09-26. Check them before quoting them.
+- Domain Connect is an open protocol maintained by its own association, not a CustomDomain™
   product. Parts of the problem analysis draw on that project's
   [knowledge base](https://github.com/Domain-Connect/knowledge-base), published under CC0.
 
-Sibling guides cover the same machinery for other verticals:
-[agencies](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-agencies),
-[AI agents](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-ai-agents),
-[email platforms](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-email-platforms).
 Corrections are welcome and the useful ones come with a source: see
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Related
+
+- [connect-domain-for-agencies](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-agencies): CustomDomain™ for Agencies
+- [connect-domain-for-ai-agents](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-ai-agents): CustomDomain™ for AI Agents
+- [connect-domain-for-email-platforms](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-email-platforms): CustomDomain™ for Email Platforms
+- [customdomain-sdk](https://github.com/CUSTOM-DOMAIN-APP/customdomain-sdk): the browser SDK `customdomain-js` and the React wrapper `@customdomain/react`
+- [customdomain-mcp](https://github.com/CUSTOM-DOMAIN-APP/customdomain-mcp): the hosted MCP server for AI agents
+- [docs](https://github.com/CUSTOM-DOMAIN-APP/docs): the CustomDomain™ documentation source, rendered at [docs.customdomain.ai](https://docs.customdomain.ai/docs)
+- [awesome-custom-domains](https://github.com/CUSTOM-DOMAIN-APP/awesome-custom-domains): the curated list of the category, including the alternatives to this product
+
+## Support
+
+- **Docs:** [docs.customdomain.ai](https://docs.customdomain.ai/docs)
+- **Questions and ideas:** [GitHub Discussions](https://github.com/CUSTOM-DOMAIN-APP/docs/discussions)
+- **Bugs and corrections:** [open an issue](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-website-builders/issues) on this repository
+- **Service status:** [status.customdomain.ai](https://status.customdomain.ai)
+- **Account and billing:** connect@customdomain.ai
+- **Security:** report privately to security@customdomain.ai, never in a public issue. Policy: [app.customdomain.ai/security](https://app.customdomain.ai/security)
+
 ## License
 
-MIT. See [LICENSE](LICENSE).
+[MIT](./LICENSE). CustomDomain™ is a product of EverJust Company.

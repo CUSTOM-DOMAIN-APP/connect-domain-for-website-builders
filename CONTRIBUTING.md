@@ -19,7 +19,7 @@ A pull request is welcome for anything you can state in a sentence or two. For a
 - No em dashes or en dashes anywhere in this repo.
 - American English.
 - Real DNS and TLS facts only. No invented numbers, no rounded-up counts, no capability the product does not have.
-- Write the brand as **CustomDomain**, one word. The spaced form is the generic category and means something else. Never rename a machine-readable identifier: Domain Connect `providerId` and `serviceId` values, package names, and URLs stay exactly as they are.
+- Write the product name as **CustomDomain™**: one word, capital C and D, with the ™. The generic concept stays lowercase ("custom domain"). Never rename a machine-readable identifier: Domain Connect `providerId` and `serviceId` values, package names, and URLs stay exactly as they are.
 - Say the exact number. "25 providers have an automatic path" is correct; "25+" and "more than 25" are not, because 25 is the count. 63 is the catalogued total and must never be attached to an automatic verb.
 - Prefer a documented limitation to a soft claim. If something is gated, off by default, or not built, say so.
 
