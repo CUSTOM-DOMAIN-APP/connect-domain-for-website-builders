@@ -189,8 +189,8 @@ So your handler must be idempotent. The same event can arrive more than once; de
 - [Create a connection](https://docs.customdomain.ai/docs/connect-flow/create-a-connection)
 - [Connections: lifecycle, records, drift](https://docs.customdomain.ai/docs/concepts/connections)
 - [Webhooks overview](https://docs.customdomain.ai/docs/webhooks/overview) and [verifying signatures](https://docs.customdomain.ai/docs/webhooks/verifying-signatures)
-- The served spec: [api.customdomain.ai/v1/openapi.json](https://api.customdomain.ai/v1/openapi.json), OpenAPI 3.1, 68 paths on 2026-09-26
+- The served spec: [api.customdomain.ai/v1/openapi.json](https://api.customdomain.ai/v1/openapi.json), OpenAPI 3.1, 129 paths on 2026-10-20
 
 ## About CustomDomain™
 
-This guide is maintained by the team behind [CustomDomain™](https://customdomain.ai), which catalogs 63 DNS and registrar providers, 25 of them with an automatic path and 38 on a guided flow with automatic verification. Integrate through the [connect widget](https://customdomain.ai/connect-domain-widget) or the [REST API](https://customdomain.ai/custom-domain-api). Docs: [docs.customdomain.ai](https://docs.customdomain.ai/docs). Pricing starts at $0, with the free tier capped at 10 domain connections a year: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).
+This guide is maintained by the team behind [CustomDomain™](https://customdomain.ai), which catalogs 178 DNS and registrar providers, 62 of them with an automatic path and 116 on a guided flow with automatic verification. Integrate through the [connect widget](https://customdomain.ai/connect-domain-widget) or the [REST API](https://customdomain.ai/custom-domain-api). Docs: [docs.customdomain.ai](https://docs.customdomain.ai/docs). Plans start at $10 a month (Starter, 10 domain connections a year) with a 14 day free trial, and a new workspace connects its first ten domains without a card: [app.customdomain.ai/signup](https://app.customdomain.ai/signup).
