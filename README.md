@@ -1,8 +1,9 @@
-# CustomDomain™ for Website Builders
+# Custom domains for website builders: the CustomDomain™ field guide
 
-Connect custom domains to your website builder: a field guide to one-click domain connection.
+Custom domains for website builders and no-code platforms: the records, verification, TLS and connect-flow UX,
+with Next.js on Vercel, Caddy and Cloudflare for SaaS compared.
 
-**Status:** Published · 6 guides · live API numbers re-verified on 2026-09-26 · public
+**Status:** Published · 6 guides · live API numbers re-verified on 2026-10-20 · public
 
 [![docs](https://img.shields.io/badge/docs-docs.customdomain.ai-1c1917?style=flat)](https://docs.customdomain.ai/docs)
 [![license](https://img.shields.io/badge/license-MIT-1c1917?style=flat)](./LICENSE)
@@ -15,7 +16,7 @@ Connect custom domains to your website builder: a field guide to one-click domai
 | **Who it's for** | Engineers and product teams behind site builders and no-code platforms |
 | **Live at** | [customdomain.ai/for/site-builders](https://customdomain.ai/for/site-builders) · [docs.customdomain.ai](https://docs.customdomain.ai/docs) |
 | **Stack** | Markdown only · 6 guides · no build step · MIT |
-| **Status** | Published · provider census and API path count re-verified 2026-09-26 |
+| **Status** | Published · provider census and API path count re-verified 2026-10-20 |
 
 This repository explains how website builder platforms let their users publish on a domain
 they own: the DNS records involved, how ownership verification and TLS issuance actually
@@ -67,8 +68,8 @@ census endpoint, which is the source they trace to:
 ```bash
 curl -s https://api.customdomain.ai/v1/providers/census \
   | jq '.count, (.providers | group_by(.mode) | map({(.[0].mode): length}) | add)'
-# 63
-# { "api": 17, "dc": 2, "manual": 38, "oauth": 6 }
+# 178
+# { "api": 55, "dc": 1, "manual": 116, "oauth": 6 }
 ```
 
 To run the flow the guides describe, mint a short-lived widget token on your server and open
@@ -100,19 +101,73 @@ answers expire. Order matters. Prove control, then issue the certificate, then r
 or you will eventually serve one customer's site on another person's domain.
 
 What differs between platforms is who writes the records. There are three rails, and the
-provider census counts how many of the 63 catalogued DNS and registrar providers sit on each:
+provider census counts how many of the 178 catalogued DNS and registrar providers sit on each:
 
 | Rail | Providers | User effort | Typical time to live |
 |---|---|---|---|
 | One-click OAuth | 6 | Signs in at their own provider and approves | About 30 seconds |
-| One-click Domain Connect | 2 | Approves the change at the provider itself | About 30 seconds |
-| API token | 17 | Pastes one scoped token | A few minutes |
-| Guided manual with automatic verification | 38 | Copies the exact records shown | Minutes, longer with stale caches |
+| One-click Domain Connect | 1 | Approves the change at the provider itself | About 30 seconds |
+| API token | 55 | Pastes one scoped token | A few minutes |
+| Guided manual with automatic verification | 116 | Copies the exact records shown | Minutes, longer with stale caches |
 
 Treat the browser callback as a UI signal and the webhook as the state change. The events a
 site builder wires up are `connection.live`, `connection.failed`, `domain.record_missing`,
 `domain.record_restored` and `connection.disconnected`. Signatures are HMAC-SHA256; the full
 catalog and the state machine are in [Integrating the connect flow](docs/05-integrating-the-connect-flow.md).
+
+## Next.js on Vercel, Caddy and Cloudflare for SaaS
+
+Most site builders asking how to offer custom domains already run on one of three stacks, and each one
+handles routing and TLS for customer hostnames well. None of them writes the record into the customer's DNS
+zone, which is the step this guide is mostly about. What each one does, in its own vendor's terms:
+
+**Next.js on Vercel.** Add each customer's domain to your project with the Vercel SDK
+(`projectsAddProjectDomain`) or the REST API, show the customer the record Vercel reports for it (an `A`
+record, `76.76.21.21` or the value on the domain's card, at the root; a `CNAME` for a subdomain), and Vercel
+issues a certificate per domain. A domain already in use on another Vercel account also needs a `TXT` record,
+which you check with `projectsVerifyProjectDomain`. The app itself maps the request's hostname to a tenant;
+Vercel's [Next.js multi-tenant example](https://github.com/vercel/platforms) does it for tenant subdomains in
+`proxy.ts`, and a customer's own domain is one more hostname to look up. Vercel's guide: [Configuring custom domains](https://vercel.com/docs/platforms/multi-tenant-platforms/configuring-domains).
+
+**Caddy with on-demand TLS.** On servers you run, Caddy can issue a certificate for a hostname the first time
+a TLS handshake asks for it. Restrict it with an `ask` endpoint: Caddy calls it with `?domain=` and issues
+only on a `2xx`, so only domains in your database get certificates.
+
+```caddyfile
+{
+	on_demand_tls {
+		ask http://localhost:5555/domain-allowed
+	}
+}
+
+https:// {
+	tls {
+		on_demand
+	}
+	reverse_proxy localhost:3000
+}
+```
+
+Customers point a `CNAME` (or `A` records, at the root) at your servers. You run the servers, the `ask`
+endpoint, shared certificate storage if you run more than one instance, and your share of the CA's rate
+limits. Caddy's docs: [On-Demand TLS](https://caddyserver.com/docs/automatic-https#on-demand-tls).
+
+**Cloudflare for SaaS.** Put your platform zone on Cloudflare, set a fallback origin, and create a custom
+hostname per customer (`POST /zones/{zone_id}/custom_hostnames`). The customer adds a `CNAME` to your CNAME
+target, for example `customers.yourplatform.com`, and Cloudflare validates the hostname and issues and renews
+its certificate at the edge. A root domain needs a provider that can flatten a `CNAME` at the apex, or
+Cloudflare's apex proxying, a paid Enterprise add-on. On the Free, Pro and Business plans 100 custom hostnames
+are included and each additional one is $0.10 (the Cloudflare for SaaS plans page, read 2026-10-20). Cloudflare's
+guide: [Getting started](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/start/getting-started/).
+
+**Where CustomDomain™ fits.** Every option above still ends with your customer copying a record into a DNS
+panel. CustomDomain™ is the part that writes it: it detects the customer's DNS provider, writes the records
+through the provider where it can (62 of the 178 providers in the census, by OAuth, Domain Connect or a scoped
+API token), shows the exact records for the other 116, and verifies them in public DNS. It can point domains
+at its own edge, which terminates TLS and proxies to your origin (the Growth plan and up), or at your own
+infrastructure on every plan: a Vercel project, your Caddy servers, or your Cloudflare for SaaS CNAME target,
+which keeps issuing the certificates. If your customers are happy to paste records and you already run one of
+the stacks above, you may not need it.
 
 ## Repository layout
 
@@ -135,8 +190,8 @@ LICENSE                                          MIT
   illustrative extracts of the real SDK surface documented at [docs.customdomain.ai](https://docs.customdomain.ai/docs).
 - Numbers age. Provider counts and API shapes are re-verified against the
   [census endpoint](https://api.customdomain.ai/v1/providers/census) and the served
-  [OpenAPI 3.1 spec](https://api.customdomain.ai/v1/openapi.json), which described 68 paths
-  on 2026-09-26. Check them before quoting them.
+  [OpenAPI 3.1 spec](https://api.customdomain.ai/v1/openapi.json), which described 129 paths
+  on 2026-10-20. Check them before quoting them.
 - Domain Connect is an open protocol maintained by its own association, not a CustomDomain™
   product. Parts of the problem analysis draw on that project's
   [knowledge base](https://github.com/Domain-Connect/knowledge-base), published under CC0.
@@ -146,9 +201,9 @@ Corrections are welcome and the useful ones come with a source: see
 
 ## Related
 
-- [connect-domain-for-agencies](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-agencies): CustomDomain™ for Agencies
-- [connect-domain-for-ai-agents](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-ai-agents): CustomDomain™ for AI Agents
-- [connect-domain-for-email-platforms](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-email-platforms): CustomDomain™ for Email Platforms
+- [connect-domain-for-agencies](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-agencies): custom domains for agencies, the field guide
+- [connect-domain-for-ai-agents](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-ai-agents): custom domains for AI agents, the field guide
+- [connect-domain-for-email-platforms](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-email-platforms): custom sending domains for email platforms, the field guide
 - [customdomain-sdk](https://github.com/CUSTOM-DOMAIN-APP/customdomain-sdk): the browser SDK `customdomain-js` and the React wrapper `@customdomain/react`
 - [customdomain-mcp](https://github.com/CUSTOM-DOMAIN-APP/customdomain-mcp): the hosted MCP server for AI agents
 - [docs](https://github.com/CUSTOM-DOMAIN-APP/docs): the CustomDomain™ documentation source, rendered at [docs.customdomain.ai](https://docs.customdomain.ai/docs)
