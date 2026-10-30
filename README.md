@@ -1,25 +1,12 @@
-# Custom domains for website builders: the CustomDomain™ field guide
+# Custom domains for website builders
 
-Custom domains for website builders and no-code platforms: the records, verification, TLS and connect-flow UX,
-with Next.js on Vercel, Caddy and Cloudflare for SaaS compared.
+The records, proof of control, TLS and connect-flow UX behind a publish button that ends on the customer's own
+domain, with Next.js on Vercel, Caddy and Cloudflare for SaaS compared.
 
-**Status:** Published · 6 guides · live API numbers re-verified on 2026-10-20 · public
-
-[![docs](https://img.shields.io/badge/docs-docs.customdomain.ai-1c1917?style=flat)](https://docs.customdomain.ai/docs)
-[![license](https://img.shields.io/badge/license-MIT-1c1917?style=flat)](./LICENSE)
-
-[Website](https://customdomain.ai) · [Docs](https://docs.customdomain.ai/docs) · [Console](https://app.customdomain.ai) · [For site builders](https://customdomain.ai/for/site-builders) · [Connect widget](https://customdomain.ai/connect-domain-widget)
-
-|  |  |
-|---|---|
-| **What it is** | A field guide to domain connection for website builder platforms |
-| **Who it's for** | Engineers and product teams behind site builders and no-code platforms |
-| **Live at** | [customdomain.ai/for/site-builders](https://customdomain.ai/for/site-builders) · [docs.customdomain.ai](https://docs.customdomain.ai/docs) |
-| **Stack** | Markdown only · 6 guides · no build step · MIT |
-| **Status** | Published · provider census and API path count re-verified 2026-10-20 |
+[Custom domains for site builders on customdomain.ai](https://customdomain.ai/gh/website-builders) · [The widget in the docs](https://docs.customdomain.ai/docs/widget-sdk/overview) · [Start free: first ten domains, no card](https://app.customdomain.ai/signup)
 
 This repository explains how website builder platforms let their users publish on a domain
-they own: the DNS records involved, how ownership verification and TLS issuance actually
+they own: the DNS records involved, how proof of control and TLS issuance actually
 work, and how to build a connect flow a non-technical user can finish without a support
 ticket. It is maintained by the team behind [CustomDomain™](https://customdomain.ai).
 
@@ -48,7 +35,7 @@ client sites hit the same wall at the same screen. If your product ends in a pub
 the domain step is the last thing standing between a user and a site they are proud to send
 to someone.
 
-## What it covers
+## In this guide
 
 - [How site builders offer custom domains](docs/01-how-site-builders-offer-custom-domains.md): the subdomain-to-custom-domain model, routing, and wildcard versus per-domain TLS
 - [The connect flow UX](docs/02-the-connect-flow-ux.md): error states, propagation honesty, and what a good in-product connect experience looks like
@@ -68,8 +55,8 @@ census endpoint, which is the source they trace to:
 ```bash
 curl -s https://api.customdomain.ai/v1/providers/census \
   | jq '.count, (.providers | group_by(.mode) | map({(.[0].mode): length}) | add)'
-# 178
-# { "api": 55, "dc": 1, "manual": 116, "oauth": 6 }
+# 189
+# { "api": 66, "dc": 1, "manual": 116, "oauth": 6 }
 ```
 
 To run the flow the guides describe, mint a short-lived widget token on your server and open
@@ -101,14 +88,14 @@ answers expire. Order matters. Prove control, then issue the certificate, then r
 or you will eventually serve one customer's site on another person's domain.
 
 What differs between platforms is who writes the records. There are three rails, and the
-provider census counts how many of the 178 catalogued DNS and registrar providers sit on each:
+provider census counts how many of the 189 known DNS and registrar providers sit on each (2026-10-30):
 
-| Rail | Providers | User effort | Typical time to live |
-|---|---|---|---|
-| One-click OAuth | 6 | Signs in at their own provider and approves | About 30 seconds |
-| One-click Domain Connect | 1 | Approves the change at the provider itself | About 30 seconds |
-| API token | 55 | Pastes one scoped token | A few minutes |
-| Guided manual with automatic verification | 116 | Copies the exact records shown | Minutes, longer with stale caches |
+| Rail | Providers | User effort |
+|---|---|---|
+| One-click OAuth | 6 | Signs in at their own provider and approves |
+| One-click Domain Connect | 1 | Approves the change at the provider itself |
+| API token | 66 | Pastes one scoped token |
+| Guided manual with automatic verification | 116 | Copies the exact records shown |
 
 Treat the browser callback as a UI signal and the webhook as the state change. The events a
 site builder wires up are `connection.live`, `connection.failed`, `domain.record_missing`,
@@ -162,62 +149,62 @@ guide: [Getting started](https://developers.cloudflare.com/cloudflare-for-platfo
 
 **Where CustomDomain™ fits.** Every option above still ends with your customer copying a record into a DNS
 panel. CustomDomain™ is the part that writes it: it detects the customer's DNS provider, writes the records
-through the provider where it can (62 of the 178 providers in the census, by OAuth, Domain Connect or a scoped
+through the provider where it can (73 of the 189 providers in the census, by OAuth, Domain Connect or a scoped
 API token), shows the exact records for the other 116, and verifies them in public DNS. It can point domains
 at its own edge, which terminates TLS and proxies to your origin (the Growth plan and up), or at your own
 infrastructure on every plan: a Vercel project, your Caddy servers, or your Cloudflare for SaaS CNAME target,
 which keeps issuing the certificates. If your customers are happy to paste records and you already run one of
 the stacks above, you may not need it.
 
-## Repository layout
-
-```
-docs/
-  01-how-site-builders-offer-custom-domains.md   the architectural model
-  02-the-connect-flow-ux.md                      the product surface
-  03-dns-records-for-site-builders.md            the records themselves
-  04-scaling-tls-for-tenant-domains.md           certificates at scale
-  05-integrating-the-connect-flow.md             widget, webhooks, state machine
-  06-when-a-customer-leaves.md                   offboarding and dangling records
-AGENTS.md                                        API shapes and status vocabulary for coding agents
-CONTRIBUTING.md                                  house style, and how to file a correction
-LICENSE                                          MIT
-```
-
 ## Limitations
 
 - This is documentation, not a library. Nothing here is installable, and the code blocks are
   illustrative extracts of the real SDK surface documented at [docs.customdomain.ai](https://docs.customdomain.ai/docs).
-- Numbers age. Provider counts and API shapes are re-verified against the
-  [census endpoint](https://api.customdomain.ai/v1/providers/census) and the served
-  [OpenAPI 3.1 spec](https://api.customdomain.ai/v1/openapi.json), which described 129 paths
-  on 2026-10-20. Check them before quoting them.
-- Domain Connect is an open protocol maintained by its own association, not a CustomDomain™
-  product. Parts of the problem analysis draw on that project's
-  [knowledge base](https://github.com/Domain-Connect/knowledge-base), published under CC0.
+- Numbers age. Each one traces to a row in the facts block below. Check it before quoting it.
+
+<!-- facts:start -->
+## Facts and sources
+
+Read from the live endpoints on 2026-10-30. Every number in this README traces to a row here or to a source named
+where it is used. If one does not, open an issue with the file and line.
+
+| Fact | Value | Source |
+|---|---|---|
+| DNS providers known | 189 | [`/v1/providers/census`](https://api.customdomain.ai/v1/providers/census) |
+| Automatic path | 73: 66 by scoped API key, 6 by provider sign-in (OAuth), 1 by one-click setup (Domain Connect) | census `mode` |
+| Exact records and provider steps | 116 | census `mode` |
+| Going live | No TXT ownership record. A domain goes `live` when every record resolves. Statuses: `pending`, `propagating`, `live`, `failed` | [Connections](https://docs.customdomain.ai/docs/concepts/connections) |
+| HTTPS on the CustomDomain™ edge | Growth and up. On Starter and Startup, domains point at your servers and you serve TLS | [`/v1/plans`](https://api.customdomain.ai/v1/plans) |
+| Plans | Starter $10 a month, 10 domains a year, hard cap. Startup $149 a month, 600 a year. Growth $649 a month, 600 a year. Premium and Enterprise by contract, 12,000 a year. 14 day trial on Starter, Startup and Growth | [`/v1/plans`](https://api.customdomain.ai/v1/plans) |
+| Free to start | A new workspace connects its first ten domains free. No card needed to sign up | [Plans and quotas](https://docs.customdomain.ai/docs/billing/plans-and-quotas) |
+| REST API | 163 operations on 140 paths, OpenAPI 3.1.0 | [`/v1/openapi.json`](https://api.customdomain.ai/v1/openapi.json) |
+| MCP server | `customdomain-mcp` 0.6.0, 20 tools. Buying a domain through MCP is off on the hosted service | [`mcp.json`](https://mcp.customdomain.ai/.well-known/agent/mcp.json) |
+
+Check the provider split yourself:
+
+```sh
+curl -s https://api.customdomain.ai/v1/providers/census \
+  | python3 -c 'import json,sys,collections; d=json.load(sys.stdin); print(d["count"], collections.Counter(p["mode"] for p in d["providers"]))'
+# 189 Counter({'manual': 116, 'api': 66, 'oauth': 6, 'dc': 1})
+```
+<!-- facts:end -->
 
 Corrections are welcome and the useful ones come with a source: see
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Related
 
-- [connect-domain-for-agencies](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-agencies): custom domains for agencies, the field guide
-- [connect-domain-for-ai-agents](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-ai-agents): custom domains for AI agents, the field guide
-- [connect-domain-for-email-platforms](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-email-platforms): custom sending domains for email platforms, the field guide
-- [customdomain-sdk](https://github.com/CUSTOM-DOMAIN-APP/customdomain-sdk): the browser SDK `customdomain-js` and the React wrapper `@customdomain/react`
-- [customdomain-mcp](https://github.com/CUSTOM-DOMAIN-APP/customdomain-mcp): the hosted MCP server for AI agents
-- [docs](https://github.com/CUSTOM-DOMAIN-APP/docs): the CustomDomain™ documentation source, rendered at [docs.customdomain.ai](https://docs.customdomain.ai/docs)
-- [awesome-custom-domains](https://github.com/CUSTOM-DOMAIN-APP/awesome-custom-domains): the curated list of the category, including the alternatives to this product
+- [customdomain-sdk](https://github.com/CUSTOM-DOMAIN-APP/customdomain-sdk): the browser SDK `customdomain-js` and the React wrapper `@customdomain/react` used in the publish flow above
+- [connect-domain-for-agencies](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-agencies): the field guide for agencies that publish client sites on a builder
+- [awesome-custom-domains](https://github.com/CUSTOM-DOMAIN-APP/awesome-custom-domains): the curated list of the category, including the DIY building blocks
 
-## Support
+## Support and license
 
-- **Docs:** [docs.customdomain.ai](https://docs.customdomain.ai/docs)
-- **Questions and ideas:** [GitHub Discussions](https://github.com/CUSTOM-DOMAIN-APP/docs/discussions)
-- **Bugs and corrections:** [open an issue](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-website-builders/issues) on this repository
-- **Service status:** [status.customdomain.ai](https://status.customdomain.ai)
-- **Account and billing:** connect@customdomain.ai
-- **Security:** report privately to security@customdomain.ai, never in a public issue. Policy: [app.customdomain.ai/security](https://app.customdomain.ai/security)
+Problem framing draws on the [Domain Connect knowledge base](https://github.com/Domain-Connect/knowledge-base) (CC0 1.0).
 
-## License
+Questions go to [GitHub Discussions](https://github.com/CUSTOM-DOMAIN-APP/docs/discussions) and corrections to
+[this repository's issues](https://github.com/CUSTOM-DOMAIN-APP/connect-domain-for-website-builders/issues). Account and billing:
+connect@customdomain.ai. Report security issues privately to security@customdomain.ai, never in a public issue
+([policy](https://app.customdomain.ai/security)).
 
 [MIT](./LICENSE). CustomDomain™ is a product of EverJust Company.
