@@ -1,9 +1,8 @@
-# Custom domains for website builders
-
-The records, proof of control, TLS and connect-flow UX behind a publish button that ends on the customer's own
-domain, with Next.js on Vercel, Caddy and Cloudflare for SaaS compared.
-
-[Custom domains for site builders on customdomain.ai](https://customdomain.ai/gh/website-builders) · [The widget in the docs](https://docs.customdomain.ai/docs/widget-sdk/overview) · [Start free: first ten domains, no card](https://app.customdomain.ai/signup)
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/media/customdomain-mark-dark.png"><img src=".github/media/customdomain-mark.png" alt="CustomDomain" width="56"></picture></p>
+<h1 align="center">Custom domains for website builders</h1>
+<p align="center"><b>How a website builder lets its users publish on their own domain, with the CustomDomain™ widget or on your own.</b></p>
+<p align="center"><a href="https://docs.customdomain.ai/docs/widget-sdk/overview"><img src="https://img.shields.io/badge/docs-the%20widget-1c1917?style=flat" alt="docs"></a> <a href="https://customdomain.ai/gh/website-builders"><img src="https://img.shields.io/badge/website-customdomain.ai-1c1917?style=flat" alt="website"></a> <a href="https://app.customdomain.ai/signup"><img src="https://img.shields.io/badge/start%20free-first%20ten%20domains-1c1917?style=flat" alt="start free"></a> <a href="https://www.producthunt.com/products/custom-domain"><img src="https://img.shields.io/badge/Product%20Hunt-CustomDomain-1c1917?style=flat&logo=producthunt&logoColor=white" alt="Product Hunt"></a></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/media/widget-flow-dark.png"><img src=".github/media/widget-flow-light.png" alt="The CustomDomain widget: your user types their domain, signs in at their provider, and it goes live" width="860"></picture></p>
 
 This repository explains how website builder platforms let their users publish on a domain
 they own: the DNS records involved, how proof of control and TLS issuance actually
